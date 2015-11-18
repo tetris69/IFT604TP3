@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Liste des matchs</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script>
+	function updateMatchInfo() {
+		var matchId = getMatchIdFromUrl();
+	    $.ajax("../api/match/" + matchId, {
+	      success: function(data) {
+	      	var match = JSON.parse(data);
+	      	// Time
+			$("#periode").html(match.periode == "4" ? "terminé" : match.periode);  
+			$("#chronometer").html(match.chronometre);  
+			// Teams names
+			$(".teamA").html(match.equipeA);     
+			$(".teamB").html(match.equipeB); 
+			// Scores
+			$("#scoreA").html(match.compteursA.length);  
+			$("#scoreB").html(match.compteursB.length);
+			// Score players 
+			$("#scorePlayersA").html(match.compteursA.join(", ")); 
+			$("#scorePlayersB").html(match.compteursB.join(", ")); 
+			// Penalities
+			$("#penalitiesA").html(match.penalitesA.join(", ")); 
+			$("#penalitiesB").html(match.penalitesB.join(", ")); 
+			
+	      },
+	      error: function() {
+	      	alert("Erreur durant l'obtention des détails du match");
+	      }
+	   });
+	}
+	function getMatchIdFromUrl() {
+		var urlParts = window.location.pathname.split("/");
+		return urlParts[urlParts.length-1] ;
+	}
+	$(function(){
+		$("#refreshButton").click(updateMatchInfo);
+		updateMatchInfo();
+	});
+	</script>
+</head>
+
+<body>
+	<h1>Détail de match</h1>
+	<dl class="dl-horizontal">
+	  <dt>Équipes</dt>
+	  <dd><span class="teamA"></span> VS <span class="teamB"></span></dd>
+	  <dt>Période</dt>
+	  <dd id="periode">gg</dd>
+	  <dt>Chronomètre</dt>
+	  <dd id="chronometer">gg</dd>
+	  <dt>Score pour <span class="teamA"></span></dt>
+	  <dd><span id="scoreA"></span></dd>
+	  <dt>Score pour <span class="teamB"></span></dt>
+	  <dd><span id="scoreB"></span></dd>
+	  <dt>Pénalités pour <span class="teamA"></span></dt>
+	  <dd id="penalitiesA">gg</dd>
+	  <dt>Pénalités pour <span class="teamB"></span></dt>
+	  <dd id="penalitiesB">gg</dd>
+	  <dt>Scoreurs pour <span class="teamA"></span></dt>
+	  <dd id="scorePlayersA">gg</dd>
+	  <dt>Scoreurs pour <span class="teamB"></span></dt>
+	  <dd id="scorePlayersB">gg</dd>
+	</dl>
+	<button type="button" id="refreshButton">Refresh data</button>
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Liste des matchs</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script>
+	function updateMatchList() {
+	    $.ajax("api/list", {
+	      success: function(data) {
+	      	var matchs = JSON.parse(data);
+	      	$.each(matchs, function(id, desc){
+	      		$("#matchList").append('<li><a href="match/' + id + '"><span class="tab">' + desc + '</span></a></li>');
+	      	});	         
+	      },
+	      error: function() {
+	      	alert("Erreur durant l'obtention de la liste des matchs");
+	      }
+	   });
+	}
+	$(function(){	
+		updateMatchList()
+	});
+	</script>
+</head>
+
+<body>
+	<h1>Liste des matchs</h1>
+		<ul id="matchList">	
+		</ul>
+</body>
+
+</html>
